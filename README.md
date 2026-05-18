@@ -1,108 +1,467 @@
-# ENS
-Encrypted Neural Swarm
+# ENS — Encrypted Neural Swarm
 
-I want to make my licensing intentions clear as everything that follows modifies my use of the MIT 2.0 license. I want credit for my work. If you use my work, credit me. If you make changes to this and something is the basis of my work, credit me. If you want to use this in your business, contact me for a license. What you can not do is sell my work. You CAN sell YOUR work that is compatible with my work. If you improve something in what I have done, you agree to make the code available Open Source. If you want to use this in a product for sale or state/national defense, contact me for a licensing arrangement.
+**ENS** is a prototype architecture and partial Rust implementation for a **Paillier-based encrypted compute swarm** with **blockchain-audited model-state updates**.
 
-This IS NOT going to be effective with LLM's. This system is designed for significantly less data than the size of LLM's. I don't have a max size because it dependant on SO many variables. I will instead provide use cases that this system will work with.
+The project explores how encrypted inputs can be processed by untrusted or semi-trusted swarm nodes while model state, weight updates, signatures, and state hashes are tracked through a blockchain-style audit layer.
 
-This is not an "install it and it will run," type of project. It's about a 90% solution. It will take some work on your part to make the system work.
+ENS is not currently a production system, a complete install-and-run framework, or a finished distributed AI platform. This repository contains architecture notes, protocol sketches, JSON/schema material, and partial Rust implementation examples.
 
-If you have questions you can contact me. My gmail account is kd5jos@gmail.com. No, I won't rewrite something for YOUR specific needs. I'm posting this to demonstrate what 15 months of unemployment has me creating. Take this code and improve on it.
+---
 
-With all that said, what exactly is an Encrypted Neural Swarm?
-ENS provides a privacy-preserving, decentralized, and auditable system for neural network inference and training by combining homomorphic encryption with blockchain-based model state tracking, enabling distributed, fault-tolerant AI computation across untrusted nodes.
+## Project Summary
 
-What makes this idea unique:
-	•	Use of Paillier (not FHE) to offload expensive operations while still protecting input privacy
-	•	Tracking only the model weights on a blockchain as the audit/control layer
-	•	Using known plaintext weights for secure, decentralized accumulation of encrypted inputs
-	•	Creating a system that’s:
-	•	Distributed,
-	•	Verifiable,
-	•	Privacy-preserving,
-	•	Modular — nodes can be added/removed, and the blockchain handles continuity
+ENS combines several known primitives into one experimental architecture:
 
-To my knowledge, no academic or industry system has combined these exact primitives using this architectural method.
+- Paillier-style additive homomorphic encryption
+- distributed swarm-node computation
+- signed model-state updates
+- deterministic model-state hashing
+- blockchain-style audit trails
+- Tendermint/ABCI-inspired transaction validation
+- Rust-based implementation sketches and utilities
 
-What exactly does this mean? Well, let me give you some use cases to help you understand what I have created.
+The intended system flow is:
 
-Autonomous Systems with Subordinate Agents
+```text
+encrypted client input
+→ swarm-node encrypted computation
+→ Model Keeper aggregation/update
+→ signed model-state hash
+→ blockchain-audited update record
+```
 
-Use Case: Central Vehicle + Encrypted Drone Wingmen
-	•	Scenario: A central vehicle (e.g., command tank, mothership, rescue leader) dispatches tasks to nearby drones or robots.
-	•	Function: Drones process encrypted input (e.g., video, telemetry) using a shared model.
-	•	Security: The drones can compute over encrypted data but cannot decrypt it, preserving mission secrecy and isolation.
-	•	Value: Even if drones are captured or jammed, they cannot reveal sensitive data or model behavior.
+The long-term goal is to explore whether small, distributed nodes can participate in privacy-preserving computation without directly seeing the underlying plaintext data.
 
- Medical AI with Patient Data Confidentiality
+---
 
-Use Case: Encrypted Diagnosis Pipeline
-	•	Scenario: A patient submits their health data encrypted with their public key.
-	•	Function: Hospitals or diagnostic AIs can compute potential diagnoses without ever accessing raw patient data.
-	•	Output: The result is returned to the patient (or authorized physician), who decrypts it.
-	•	Value: Complete HIPAA-compliant workflows with no centralized data exposure — perfect for federated hospitals or cross-border cases.
+## Current Status
 
- Federated Training with Auditable Integrity
+This repository is currently a **design/prototype repository**.
 
-Use Case: Multi-party Model Training
-	•	Scenario: A set of institutions (e.g., banks, research labs) collaboratively train a model, but do not trust each other with raw data.
-	•	Function: Each party submits encrypted updates; ENS validates updates against a blockchain and applies them homomorphically.
-	•	Value: Enables decentralized training without ever pooling raw data, and with on-chain auditability.
+It includes:
 
- Privacy-Preserving Industrial Edge AI
+- high-level ENS architecture notes
+- node role definitions
+- communication and transaction design
+- JSON Schema and OpenAPI sketches
+- partial Rust modules for:
+  - Paillier key generation
+  - encrypted compute examples
+  - model update structures
+  - model-state hashing
+  - JSON and SQLite weight storage
+  - signed batch updates
+  - ABCI-style transaction verification
+- early protocol sketches for Model Keeper training rounds
+- notes on Tendermint-style blockchain integration
 
-Use Case: Factory Machines + Central Model
-	•	Scenario: Edge devices in a manufacturing plant observe conditions (e.g. temperature, vibration).
-	•	Function: Devices encrypt sensor data and send to a local ENS swarm.
-	•	Output: Model predicts failure risk, operating thresholds, etc.
-	•	Value: No edge device can be compromised to leak trade secrets or proprietary operations.
+It does **not** yet provide:
 
- Regulated Finance and Credit Scoring
+- a complete Cargo workspace
+- a production-ready node implementation
+- a complete peer-to-peer swarm runtime
+- a fully implemented training pipeline
+- production security guarantees
+- compliance guarantees
+- full homomorphic encryption
+- encrypted comparison, ranking, or nonlinear neural-network operations
 
-Use Case: Private Credit Models
-	•	Scenario: Credit scoring AIs compute predictions on encrypted financial histories.
-	•	Value: Lenders never see raw salary, debt, or demographic data — only model outputs and verifiable audit trails.
+---
 
- Smart Contracts with Off-Chain Intelligence
+## What ENS Is
 
-Use Case: Encrypted AI Oracle
-	•	Scenario: A smart contract requests a prediction (e.g. fraud risk, insurance premium).
-	•	Function: ENS handles the compute, returning encrypted results back on-chain.
-	•	Value: On-chain systems access powerful AI without ever touching sensitive input or model data.
+ENS is an experimental architecture for exploring this question:
 
- Defense and National Security
- 
-Use Case: Secure Joint Intelligence Analysis
- 	•	Scenario: Multiple agencies collaborate to analyze satellite or sensor data.
-  	•	Function: Each agency provides encrypted features; ENS processes and returns results securely.
-   	•	Value: Collaboration without compromising classified datasets or exposing inter-agency logic.
+> Can encrypted inputs be distributed across a swarm of compute nodes, processed without exposing plaintext, and tied to an auditable model-state ledger?
 
-  Routing and Switching
-  
-Use Case: Privacy-Preserving Network Routing with ENS
-	•	Scenario: 
- 	Each network node has local information (e.g., bandwidth, latency, congestion)
-  	This information is encrypted using a shared Paillier public key
-   	Nodes send encrypted metrics to a swarm node (or set of swarm nodes)
-    	The swarm performs homomorphic accumulation and comparisons
-     	The result helps compute the best next hop, optimal path, or route weights — without any node revealing its actual metrics
-      	•	Function:
-  	Node A wants to forward a packet
-        It sends:
-		A request to swarm: “Which neighbor (B, C, D) has best current cost to destination?” along with encrypted costs Enc(cost_B), Enc(cost_C), Enc(cost_D)
-        Swarm node performs encrypted comparison logic:
-		Could apply pre-trained models or aggregate encrypted cost values from multiple hops
-        Swarm returns encrypted ranking or recommendation
-	Node A decrypts and selects the best path
- 	•	Value:
-	Network privacy	 is maintained because costs and paths stay encrypted, there is no central visibility.
-        Decentralized path selection because multiple swarm nodes can evaluate options independently.
-	Zero trust compliant because nodes don’t need to trust neighbors with raw state.
-        Built in real-time adaptability	because the Model Keeper can retrain based on encrypted traffic stats.
-	Compliance (e.g. anonymity networks)	through traffic shaping and metrics staying fully private.
- 	It’s especially useful in:
-  		•	Zero-trust networks (mesh included)
-    		•	Overlay routing (e.g. Tor-like anonymity systems)
-      		•	Disaster recovery & ad-hoc tactical networks
+In the current design:
 
-Obviously this can be a powerful tool for many different uses. These are just examples. I'm the only developer on this project. I don't have a college degree. The work you see here is because of research, trial, and error. I have probably made mistakes. There is no warranty AT ALL, in ANYTHING I provide. You use this code/architecture at your own risk.
+- **Clients** encrypt input data.
+- **Swarm nodes** perform limited homomorphic computation over ciphertexts.
+- **Model Keepers** coordinate model state, training rounds, and weight updates.
+- **Blockchain nodes** audit and verify signed model-state changes.
+- **State hashes** provide deterministic references to model versions.
+
+The blockchain layer is not intended to run AI computation directly. Its purpose is to provide an auditable control plane for model-state changes.
+
+---
+
+## What ENS Is Not
+
+ENS is not currently:
+
+- a finished AI framework
+- a replacement for TensorFlow, PyTorch, or existing ML runtimes
+- a complete blockchain network
+- a production privacy system
+- a HIPAA-compliant system by default
+- a defense-ready system
+- a full homomorphic encryption platform
+- a general-purpose encrypted neural-network runtime
+
+ENS should currently be understood as a prototype architecture and partial implementation.
+
+---
+
+## Core Components
+
+### Client Node
+
+The client node is responsible for:
+
+- generating or holding the private decryption key
+- encrypting input data
+- sending encrypted inputs to swarm nodes
+- receiving encrypted outputs
+- decrypting final results when appropriate
+
+The client is the primary trust anchor for plaintext input data.
+
+### Swarm Node
+
+A swarm node is a compute worker.
+
+It is intended to:
+
+- receive encrypted input values
+- perform limited homomorphic operations
+- apply plaintext scalar weights where appropriate
+- return encrypted partial results
+- avoid learning the underlying plaintext input
+
+Swarm nodes are designed to be stateless or minimally stateful where possible.
+
+### Model Keeper
+
+The Model Keeper is responsible for model coordination.
+
+It may:
+
+- maintain current model weights
+- coordinate training rounds
+- dispatch encrypted compute tasks
+- aggregate results
+- update model weights
+- compute model-state hashes
+- sign model updates
+- submit updates to the audit ledger
+
+The current architecture treats the Model Keeper as a coordinating component, not as a fully decentralized consensus system by itself.
+
+### Blockchain / Audit Layer
+
+The blockchain-style layer is used to track and verify:
+
+- model IDs
+- model versions
+- signed update requests
+- model-state hashes
+- authorship
+- timestamps
+- transaction validity
+
+The audit layer is intended to make model-state changes inspectable and difficult to silently rewrite.
+
+---
+
+## Cryptographic Limits
+
+ENS currently uses Paillier-style additive homomorphic encryption concepts.
+
+Paillier is suitable for operations such as:
+
+- encrypted addition
+- accumulation of encrypted values
+- multiplication of encrypted values by plaintext scalars
+
+Paillier does **not** directly provide:
+
+- arbitrary encrypted computation
+- native encrypted comparison
+- encrypted ranking
+- encrypted nonlinear activation functions
+- full neural-network inference by itself
+- full homomorphic encryption
+
+Any future support for comparison, ranking, nonlinear activation, or more complex encrypted training logic would require additional protocols, approximations, leakage-aware design, or different cryptographic primitives.
+
+---
+
+## Implementation Scope
+
+### Implemented or Partially Implemented
+
+This repository currently includes partial implementation material for:
+
+- Paillier key generation
+- encrypted compute round-trip examples
+- Rust structures for batch model updates
+- deterministic model-state hashing examples
+- JSON model-weight storage
+- SQLite model-weight storage
+- signed model update sketches
+- ABCI-style transaction validation sketches
+- JSON Schema and OpenAPI draft material
+
+### Architectural / Design-Stage
+
+The following areas are currently design-stage:
+
+- full swarm-node lifecycle
+- Model Keeper orchestration
+- Tendermint integration
+- decentralized discovery
+- training-round coordination
+- encrypted multi-node aggregation
+- long-running peer-to-peer operation
+
+### Not Currently Implemented
+
+The following are not currently implemented:
+
+- production deployment
+- full neural-network training
+- encrypted comparison/ranking
+- nonlinear activation over encrypted values
+- complete adversarial security model
+- production identity and access management
+- compliance controls
+- hardened key management
+- robust distributed fault handling
+
+---
+
+## Threat Model Draft
+
+This prototype assumes:
+
+- clients retain private decryption keys
+- swarm nodes may be untrusted or semi-trusted
+- swarm nodes should not learn plaintext inputs
+- model update authorship is verified by signatures
+- blockchain-style state tracking provides an audit trail for model updates
+- deterministic state hashing can identify specific model versions
+
+This prototype does not yet fully address:
+
+- malicious Model Keepers
+- malicious key distribution
+- collusion between nodes
+- side-channel leakage
+- traffic analysis
+- denial-of-service attacks
+- compromised clients
+- compromised signing keys
+- production authorization policy
+- regulated deployment requirements
+
+This threat model is incomplete and should be treated as a starting point.
+
+---
+
+## Repository Guide
+
+The repository currently contains a mixture of architecture documents, protocol notes, schema drafts, and Rust implementation sketches.
+
+Suggested reading order:
+
+1. High-level architecture
+2. Node roles
+3. Encryption layer architecture
+4. Communication protocol design
+5. Transaction structures
+6. Model Keeper training round protocol
+7. Model-state hashing
+8. Batch model update structures
+9. ABCI behavior and transaction verification
+10. Storage examples
+11. Paillier compute examples
+
+The intended conceptual path is:
+
+```text
+client encrypts input
+→ swarm node computes over ciphertext
+→ Model Keeper coordinates model state
+→ update is signed
+→ state hash is recorded
+→ blockchain layer verifies/audits the update
+```
+
+---
+
+## Planned Repository Structure
+
+The repository is being moved toward a clearer structure:
+
+```text
+ENS/
+  README.md
+  LICENSE
+
+  docs/
+    architecture/
+      high-level-architecture.md
+      node-roles.md
+      encryption-layer.md
+      blockchain-layer.md
+
+    protocols/
+      communication-protocol.md
+      training-round-protocol.md
+      transaction-types.md
+      node-bootstrapping-discovery.md
+
+    tendermint/
+      tendermint.md
+      multiple-nodes.md
+      abci-app-behavior.md
+      check-deliver-tx.md
+      state-query-support.md
+
+  schemas/
+    ens_schemas.json
+    ens_openapi_3.yaml
+    api-json-schema.md
+
+  rust/
+    batch-model-updates.md
+    model-state-hashes.md
+    sqlite-storage.md
+    json-storage.md
+    paillier-keygen.md
+    swarm-compute-paillier.md
+    client-demo-roundtrip.md
+    cli-sign-submit.md
+
+  examples/
+    sample-block.md
+    test-transaction.md
+```
+
+This structure is not yet final, but it reflects the intended organization of the project.
+
+---
+
+## Roadmap
+
+### Phase 1: Repository Cleanup
+
+- clarify project scope
+- organize architecture documents
+- organize Rust examples
+- document cryptographic limits
+- resolve licensing language
+- identify which files are design notes versus implementation code
+
+### Phase 2: Buildable Rust Workspace
+
+- create a Cargo workspace
+- separate reusable crates
+- add unit tests
+- add deterministic state-hash tests
+- add signature verification tests
+- add Paillier encrypted weighted-sum example
+
+Possible workspace structure:
+
+```text
+crates/
+  ens-types/
+  ens-crypto/
+  ens-model-state/
+  ens-swarm-node/
+  ens-model-keeper/
+  ens-abci-app/
+  ens-cli/
+```
+
+### Phase 3: Vertical Proof of Concept
+
+Build the smallest end-to-end demonstration:
+
+```text
+client encrypts sample inputs
+→ swarm node computes encrypted weighted sum
+→ client decrypts result
+→ Model Keeper signs weight update
+→ ABCI app verifies update
+→ model-state hash is recorded
+```
+
+### Phase 4: Distributed Prototype
+
+- multiple swarm nodes
+- basic discovery
+- task dispatch
+- result aggregation
+- state synchronization
+- signed model updates
+- local testnet deployment
+
+---
+
+## Example Use Cases
+
+ENS is not production-ready, but the architecture may eventually be useful for exploring:
+
+- privacy-preserving distributed computation
+- auditable model updates
+- small-node encrypted compute
+- local-first encrypted AI experiments
+- verifiable model-state transitions
+- decentralized or semi-decentralized compute coordination
+- privacy-preserving research prototypes
+
+Potential medical, defense, commercial, or regulated uses would require separate security analysis, compliance review, deployment controls, access controls, audit procedures, and legal review.
+
+ENS should not be treated as compliant, certified, production-safe, or deployment-ready by default.
+
+---
+
+## Development Notes
+
+The current Rust material should be treated as implementation sketches unless otherwise marked.
+
+Important technical issues still need to be resolved, including:
+
+- replacing floating-point model weights with deterministic fixed-point or integer representations
+- defining canonical serialization for model-state hashing
+- formalizing transaction formats
+- formalizing key ownership and update authority
+- defining node identity and authorization
+- separating trusted and untrusted roles
+- specifying how Model Keepers are selected, trusted, or replaced
+- determining how training math works within Paillier’s limitations
+
+---
+
+## License Status
+
+The licensing model for this repository is under review.
+
+Until the license is finalized, do not assume that this repository grants production, commercial, defense, or closed-source product rights beyond what is explicitly stated in the license file.
+
+If this project is released under a standard open-source license, the README and license file should match that license without adding contradictory restrictions.
+
+If the project is released as source-available rather than open source, that should be stated clearly in the license file.
+
+---
+
+## Author
+
+Created by Everett Vinzant.
+
+ENS is an experimental research and prototype project exploring encrypted distributed computation, model-state auditability, and privacy-preserving swarm architecture.
+
+---
+
+## Disclaimer
+
+This repository is for research, learning, architecture exploration, and prototype development.
+
+It is not production-ready software.
+
+It does not provide legal, medical, compliance, defense, or security guarantees.
+
+Do not use ENS to process sensitive, regulated, classified, medical, financial, or production data without substantial additional engineering, review, testing, and legal/compliance analysis.
