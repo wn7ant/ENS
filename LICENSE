@@ -1,24 +1,25 @@
-MIT License - MODIFIED
+## License
 
-Copyright (c) 2025 Everett Vinzant
+ENS is offered under a dual-license model.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, for personal or 
-educational use, and to permit persons to whom the Software is furnished to 
-do so, subject to the following conditions:
+### Non-commercial public use
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+This repository is publicly available for non-commercial use, including reading, studying, cloning, experimenting, academic review, personal research, and non-commercial prototyping.
 
-This modified MIT license does not permnit commercial use without contacting
-the author to obtain a license.
+You may use the public version of this work to understand the ENS architecture, evaluate the design, build non-commercial prototypes, and contribute improvements back to the project.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+You may not use this work, in whole or in part, for commercial products, paid services, proprietary platforms, defense applications, government contracting, or revenue-generating systems without a separate written commercial license.
+
+### Commercial licensing
+
+Commercial use requires a separate license agreement.
+
+This includes, but is not limited to:
+
+- selling ENS-based software or services
+- integrating ENS concepts or code into a commercial product
+- using ENS in paid consulting, contracting, or managed services
+- deploying ENS as part of a business, government, defense, intelligence, or industrial system
+- using ENS to support proprietary AI, security, routing, blockchain, or distributed-computation platforms
+
+For commercial licensing, contact the project owner.
