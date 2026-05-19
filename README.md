@@ -351,7 +351,6 @@ This structure is not yet final, but it reflects the intended organization of th
 - organize architecture documents
 - organize Rust examples
 - document cryptographic limits
-- resolve licensing language
 - identify which files are design notes versus implementation code
 
 ### Phase 2: Buildable Rust Workspace
@@ -436,15 +435,51 @@ Important technical issues still need to be resolved, including:
 
 ---
 
-## License Status
+## License
 
-The licensing model for this repository is under review.
+ENS is offered under a dual-license model.
 
-Until the license is finalized, do not assume that this repository grants production, commercial, defense, or closed-source product rights beyond what is explicitly stated in the license file.
+### Non-commercial public use
 
-If this project is released under a standard open-source license, the README and license file should match that license without adding contradictory restrictions.
+This repository is publicly available for non-commercial use, including reading, studying, cloning, experimenting, academic review, personal research, and non-commercial prototyping.
 
-If the project is released as source-available rather than open source, that should be stated clearly in the license file.
+You may use the public version of this work to understand the ENS architecture, evaluate the design, build non-commercial prototypes, and contribute improvements back to the project.
+
+You may not use this work, in whole or in part, for commercial products, paid services, proprietary platforms, defense applications, government contracting, or revenue-generating systems without a separate written commercial license.
+
+### Commercial licensing
+
+Commercial use requires a separate license agreement.
+
+This includes, but is not limited to:
+
+- selling ENS-based software or services
+- integrating ENS concepts or code into a commercial product
+- using ENS in paid consulting, contracting, or managed services
+- deploying ENS as part of a business, government, defense, intelligence, or industrial system
+- using ENS to support proprietary AI, security, routing, blockchain, or distributed-computation platforms
+
+For commercial licensing, contact the project owner.
+
+### Contributions
+
+Contributions are welcome, but all contributions must be made with clear licensing expectations.
+
+By submitting a pull request, patch, issue comment containing code, documentation, design material, schemas, examples, or other project content, you agree that your contribution may be incorporated into ENS and distributed under the project’s current and future licensing model, including both the non-commercial public license and separate commercial licenses.
+
+Do not submit contributions unless you have the right to provide them under these terms.
+
+Contributors retain copyright to their own contributions unless otherwise agreed in writing, but grant the project owner a broad, perpetual, worldwide, royalty-free license to use, modify, distribute, sublicense, and relicense those contributions as part of ENS.
+
+### No warranty
+
+ENS is experimental research and prototype work. It is provided as-is, without warranty of any kind.
+
+The project makes no guarantee of correctness, security, cryptographic safety, fitness for production use, regulatory compliance, or suitability for sensitive systems.
+
+Do not use ENS in production, safety-critical, medical, financial, defense, infrastructure, or high-risk environments without independent review, testing, and a separate written license.
+
+This section summarizes the intended licensing model. A formal `LICENSE` file and `CONTRIBUTING.md` file will be added before accepting outside contributions.
 
 ---
 
